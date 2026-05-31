@@ -1,0 +1,160 @@
+{
+  "app": {
+    "name": "简历制作平台",
+    "slogan": "AI驱动的专业简历制作平台"
+  },
+  "nav": {
+    "home": "首页",
+    "templates": "模板中心",
+    "pricing": "定价",
+    "dashboard": "我的简历",
+    "login": "登录",
+    "register": "免费注册",
+    "logout": "退出登录"
+  },
+  "auth": {
+    "login": "登录",
+    "register": "注册",
+    "email": "邮箱地址",
+    "password": "密码",
+    "confirmPassword": "确认密码",
+    "nickname": "昵称",
+    "rememberMe": "记住我",
+    "forgotPassword": "忘记密码？",
+    "noAccount": "还没有账号？",
+    "hasAccount": "已有账号？",
+    "registerNow": "免费注册",
+    "loginNow": "立即登录",
+    "agreeTerms": "我已阅读并同意",
+    "terms": "服务条款",
+    "privacy": "隐私政策"
+  },
+  "common": {
+    "save": "保存",
+    "cancel": "取消",
+    "confirm": "确认",
+    "delete": "删除",
+    "edit": "编辑",
+    "add": "添加",
+    "search": "搜索",
+    "loading": "加载中...",
+    "noData": "暂无数据",
+    "success": "操作成功",
+    "error": "操作失败",
+    "back": "返回",
+    "next": "下一步",
+    "previous": "上一步",
+    "submit": "提交",
+    "reset": "重置",
+    "export": "导出",
+    "import": "导入",
+    "share": "分享",
+    "copy": "复制",
+    "download": "下载",
+    "upload": "上传",
+    "preview": "预览",
+    "close": "关闭",
+    "done": "完成"
+  },
+  "resume": {
+    "title": "简历标题",
+    "untitled": "未命名简历",
+    "create": "新建简历",
+    "edit": "编辑简历",
+    "delete": "删除简历",
+    "duplicate": "复制简历",
+    "favorite": "收藏",
+    "unfavorite": "取消收藏",
+    "status": {
+      "draft": "草稿",
+      "published": "已发布",
+      "archived": "已归档"
+    }
+  },
+  "editor": {
+    "modules": {
+      "personal": "个人信息",
+      "education": "教育经历",
+      "experience": "工作经验",
+      "projects": "项目经历",
+      "skills": "技能特长",
+      "summary": "自我评价"
+    },
+    "preview": {
+      "pc": "PC",
+      "tablet": "平板",
+      "mobile": "手机"
+    },
+    "toolbar": {
+      "undo": "撤销",
+      "redo": "重做",
+      "template": "模板",
+      "aiAssistant": "AI助手",
+      "export": "导出",
+      "share": "分享"
+    },
+    "statusBar": {
+      "wordCount": "字",
+      "saving": "保存中...",
+      "unsaved": "有未保存的更改",
+      "saved": "已保存",
+      "shortcuts": {
+        "save": "保存",
+        "undo": "撤销",
+        "export": "导出"
+      }
+    }
+  },
+  "template": {
+    "select": "选择模板",
+    "all": "全部",
+    "minimal": "简约",
+    "business": "商务",
+    "creative": "创意",
+    "classic": "经典",
+    "free": "免费",
+    "premium": "专业版",
+    "uses": "次使用"
+  },
+  "ai": {
+    "assistant": "AI助手",
+    "polish": "内容润色",
+    "score": "简历评分",
+    "match": "职位匹配",
+    "generate": "生成内容",
+    "translate": "翻译",
+    "remainingUsage": "今日剩余使用次数",
+    "clearChat": "清空对话",
+    "welcome": "AI简历助手",
+    "welcomeDesc": "我可以帮助您润色内容、优化表达、分析简历质量。试试上面的快捷功能，或者直接输入问题。"
+  },
+  "analysis": {
+    "title": "简历分析报告",
+    "overallScore": "综合评分",
+    "dimensions": {
+      "completeness": "完整性",
+      "professionalism": "专业性",
+      "quantification": "量化程度",
+      "layout": "排版",
+      "keywords": "关键词"
+    },
+    "issues": "问题清单",
+    "goToEditor": "去优化简历",
+    "analyzeAgain": "重新分析"
+  },
+  "pricing": {
+    "title": "选择适合您的方案",
+    "subtitle": "灵活的定价，满足不同需求",
+    "plans": {
+      "free": "免费版",
+      "pro": "专业版",
+      "enterprise": "企业版"
+    },
+    "perMonth": "/月",
+    "perYear": "/年",
+    "forever": "/永久",
+    "recommended": "推荐",
+    "subscribe": "立即订阅",
+    "contactSales": "联系销售"
+  }
+}
