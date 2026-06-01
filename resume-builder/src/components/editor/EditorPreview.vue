@@ -1,17 +1,17 @@
 <template>
-  <div class="w-1/2 bg-gray-200 border-l border-gray-300 flex flex-col">
+  <div class="w-1/2 bg-stone-950 border-l border-stone-800 flex flex-col">
     <!-- Preview Header -->
-    <div class="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+    <div class="bg-stone-900 border-b border-stone-800 px-4 py-2.5 flex items-center justify-between">
       <div class="flex items-center space-x-2">
-        <span class="text-sm font-medium text-gray-700">预览</span>
-        <div class="flex items-center space-x-1 bg-gray-100 rounded-lg p-1">
+        <span class="text-sm font-medium text-stone-300">预览</span>
+        <div class="flex items-center space-x-1 bg-stone-800 rounded-lg p-1">
           <button
             @click="editorStore.setPreviewMode('pc')"
             :class="[
-              'px-2 py-1 text-xs font-medium rounded transition-colors',
+              'px-2.5 py-1 text-xs font-medium rounded transition-all',
               editorStore.previewMode === 'pc'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-stone-700 text-white shadow-sm'
+                : 'text-stone-400 hover:text-stone-200'
             ]"
           >
             PC
@@ -19,10 +19,10 @@
           <button
             @click="editorStore.setPreviewMode('tablet')"
             :class="[
-              'px-2 py-1 text-xs font-medium rounded transition-colors',
+              'px-2.5 py-1 text-xs font-medium rounded transition-all',
               editorStore.previewMode === 'tablet'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-stone-700 text-white shadow-sm'
+                : 'text-stone-400 hover:text-stone-200'
             ]"
           >
             平板
@@ -30,10 +30,10 @@
           <button
             @click="editorStore.setPreviewMode('mobile')"
             :class="[
-              'px-2 py-1 text-xs font-medium rounded transition-colors',
+              'px-2.5 py-1 text-xs font-medium rounded transition-all',
               editorStore.previewMode === 'mobile'
-                ? 'bg-white text-gray-900 shadow-sm'
-                : 'text-gray-600 hover:text-gray-900'
+                ? 'bg-stone-700 text-white shadow-sm'
+                : 'text-stone-400 hover:text-stone-200'
             ]"
           >
             手机
@@ -45,16 +45,16 @@
       <div class="flex items-center space-x-2">
         <button
           @click="editorStore.zoomOut"
-          class="p-1 text-gray-600 hover:text-gray-900 rounded"
+          class="p-1.5 text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
           </svg>
         </button>
-        <span class="text-sm text-gray-600 w-12 text-center">{{ editorStore.previewZoom }}%</span>
+        <span class="text-sm text-stone-400 w-12 text-center">{{ editorStore.previewZoom }}%</span>
         <button
           @click="editorStore.zoomIn"
-          class="p-1 text-gray-600 hover:text-gray-900 rounded"
+          class="p-1.5 text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg transition-colors"
         >
           <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
@@ -62,7 +62,7 @@
         </button>
         <button
           @click="editorStore.resetZoom"
-          class="text-xs text-gray-500 hover:text-gray-700"
+          class="text-xs text-stone-500 hover:text-stone-300 transition-colors"
         >
           重置
         </button>

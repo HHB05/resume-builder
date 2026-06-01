@@ -1,180 +1,133 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <AppHeader />
+  <div class="min-h-screen bg-stone-950 text-white">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 px-6 py-4 backdrop-blur-md bg-stone-950/70 border-b border-stone-800/50">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+            <span class="text-stone-950 font-bold text-lg">R</span>
+          </div>
+          <span class="font-serif text-xl tracking-tight">ResumeCraft</span>
+        </div>
+        <div class="flex items-center gap-4">
+          <span class="text-sm text-stone-400">{{ authStore.userNickname }}</span>
+          <button @click="handleLogout" class="text-sm text-stone-500 hover:text-white transition-colors">
+            退出
+          </button>
+        </div>
+      </div>
+    </nav>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto py-12 px-6">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900">我的简历</h1>
-        <p class="mt-1 text-sm text-gray-600">管理您的所有简历</p>
+      <div class="mb-12">
+        <h1 class="text-4xl font-serif tracking-tight">我的简历</h1>
+        <p class="text-stone-500 mt-2">管理您的所有简历</p>
       </div>
 
       <!-- Actions -->
-      <div class="mb-6 flex items-center justify-between">
-        <div class="flex items-center space-x-4">
-          <input
-            v-model="searchQuery"
-            type="text"
-            placeholder="搜索简历..."
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          />
-          <select
-            v-model="statusFilter"
-            class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-          >
-            <option value="">全部状态</option>
-            <option value="draft">草稿</option>
-            <option value="published">已发布</option>
-            <option value="archived">已归档</option>
-          </select>
+      <div class="mb-8 flex items-center justify-between">
+        <div class="flex items-center gap-4">
+          <div class="relative">
+            <input
+              v-model="searchQuery"
+              type="text"
+              placeholder="搜索简历..."
+              class="w-64 px-4 py-2.5 bg-stone-800/50 border border-stone-700 rounded-xl text-white placeholder-stone-500 focus:outline-none focus:border-amber-500 transition-colors"
+            />
+            <svg class="absolute right-3 top-1/2 -translate-y-1/2 w-4 h-4 text-stone-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+            </svg>
+          </div>
         </div>
 
         <button
           @click="createNewResume"
-          class="flex items-center px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+          class="px-6 py-2.5 bg-gradient-to-r from-amber-500 to-orange-500 text-stone-950 font-semibold rounded-xl hover:shadow-lg hover:shadow-amber-500/25 transition-all hover:scale-105 flex items-center gap-2"
         >
-          <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
+          <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"/>
           </svg>
           新建简历
         </button>
       </div>
 
       <!-- Resume list -->
-      <div v-if="resumeListStore.loading && resumeListStore.resumes.length === 0" class="text-center py-12">
-        <svg class="animate-spin h-8 w-8 text-primary-600 mx-auto" fill="none" viewBox="0 0 24 24">
-          <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-          <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-        </svg>
-        <p class="mt-4 text-gray-600">加载中...</p>
+      <div v-if="resumeListStore.loading && resumeListStore.resumes.length === 0" class="text-center py-20">
+        <div class="w-12 h-12 border-4 border-stone-700 border-t-amber-500 rounded-full animate-spin mx-auto"></div>
+        <p class="mt-4 text-stone-500">加载中...</p>
       </div>
 
-      <div v-else-if="filteredResumes.length === 0" class="text-center py-12 bg-white rounded-lg border border-gray-200">
-        <svg class="mx-auto h-12 w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
-        </svg>
-        <h3 class="mt-2 text-sm font-medium text-gray-900">暂无简历</h3>
-        <p class="mt-1 text-sm text-gray-500">开始创建您的第一份简历</p>
-        <div class="mt-6">
-          <button
-            @click="createNewResume"
-            class="inline-flex items-center px-4 py-2 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-primary-600 hover:bg-primary-700"
-          >
-            <svg class="w-5 h-5 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-            </svg>
-            新建简历
-          </button>
-        </div>
+      <div v-else-if="filteredResumes.length === 0" class="text-center py-20 bg-stone-900/30 rounded-2xl border border-stone-800">
+        <div class="text-6xl mb-4">📄</div>
+        <h3 class="text-xl font-serif text-stone-300">暂无简历</h3>
+        <p class="text-stone-500 mt-2">创建您的第一份简历</p>
+        <button
+          @click="createNewResume"
+          class="mt-6 px-6 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-stone-950 font-semibold rounded-xl hover:shadow-lg hover:shadow-amber-500/25 transition-all"
+        >
+          新建简历
+        </button>
       </div>
 
       <div v-else class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         <div
           v-for="resume in filteredResumes"
           :key="resume.id"
-          class="bg-white rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-shadow"
+          class="group relative bg-stone-900/50 rounded-2xl border border-stone-800 hover:border-amber-500/50 transition-all overflow-hidden"
         >
           <div class="p-6">
-            <div class="flex items-start justify-between">
+            <div class="flex items-start justify-between mb-4">
               <div class="flex-1">
-                <h3 class="text-lg font-medium text-gray-900 truncate">{{ resume.title }}</h3>
-                <p class="mt-1 text-sm text-gray-500">
+                <h3 class="text-lg font-serif text-white truncate">{{ resume.title }}</h3>
+                <p class="text-sm text-stone-500 mt-1">
                   {{ formatDate(resume.updatedAt) }}
                 </p>
               </div>
-              <div class="flex items-center">
-                <button
-                  @click.stop="toggleFavorite(resume)"
-                  class="p-1 text-gray-400 hover:text-yellow-500 transition-colors"
-                >
-                  <svg
-                    :class="['w-5 h-5', resume.isFavorite ? 'text-yellow-500 fill-current' : '']"
-                    fill="none"
-                    stroke="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z" />
-                  </svg>
-                </button>
-                <div class="relative" ref="menuRefs">
-                  <button
-                    @click.stop="toggleMenu(resume.id)"
-                    class="p-1 text-gray-400 hover:text-gray-600 rounded transition-colors"
-                  >
-                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 5v.01M12 12v.01M12 19v.01M12 6a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2zm0 7a1 1 0 110-2 1 1 0 010 2z" />
-                    </svg>
-                  </button>
-                  <div
-                    v-if="openMenuId === resume.id"
-                    class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-10"
-                  >
-                    <button
-                      @click="editResume(resume.id)"
-                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      编辑
-                    </button>
-                    <button
-                      @click="duplicateResume(resume)"
-                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      复制
-                    </button>
-                    <button
-                      @click="shareResume(resume)"
-                      class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                    >
-                      分享
-                    </button>
-                    <div class="border-t border-gray-100"></div>
-                    <button
-                      @click="deleteResume(resume)"
-                      class="block w-full text-left px-4 py-2 text-sm text-red-600 hover:bg-gray-100"
-                    >
-                      删除
-                    </button>
-                  </div>
-                </div>
-              </div>
+              <button
+                @click.stop="toggleFavorite(resume)"
+                class="p-2 text-stone-500 hover:text-amber-400 transition-colors"
+              >
+                <svg v-if="resume.isFavorite" class="w-5 h-5 text-amber-400 fill-current" viewBox="0 0 24 24">
+                  <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/>
+                </svg>
+                <svg v-else class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.915c.969 0 1.371 1.24.588 1.81l-3.976 2.888a1 1 0 00-.363 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.976-2.888a1 1 0 00-1.176 0l-3.976 2.888c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.363-1.118l-3.976-2.888c-.784-.57-.38-1.81.588-1.81h4.914a1 1 0 00.951-.69l1.519-4.674z"/>
+                </svg>
+              </button>
             </div>
 
-            <!-- Score -->
-            <div v-if="resume.score" class="mt-4 flex items-center">
-              <span class="text-sm text-gray-600 mr-2">评分：</span>
+            <div class="flex items-center gap-2 mb-4">
+              <span class="px-2 py-1 bg-stone-800 rounded text-xs text-stone-400">
+                {{ templateName(resume.templateId) }}
+              </span>
               <span
                 :class="[
-                  'text-sm font-medium',
-                  resume.score >= 80 ? 'text-green-600' :
-                  resume.score >= 60 ? 'text-yellow-600' : 'text-red-600'
+                  'px-2 py-1 rounded text-xs',
+                  resume.status === 'draft' ? 'bg-stone-800 text-stone-400' :
+                  'bg-emerald-500/20 text-emerald-400'
                 ]"
               >
-                {{ resume.score }}
+                {{ resume.status === 'draft' ? '草稿' : '已发布' }}
               </span>
             </div>
 
-            <!-- Status badge -->
-            <div class="mt-4">
-              <span
-                :class="[
-                  'inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium',
-                  resume.status === 'draft' ? 'bg-gray-100 text-gray-800' :
-                  resume.status === 'published' ? 'bg-green-100 text-green-800' :
-                  'bg-yellow-100 text-yellow-800'
-                ]"
+            <div class="flex gap-2">
+              <button
+                @click="editResume(resume.id)"
+                class="flex-1 py-2.5 bg-stone-800 hover:bg-stone-700 rounded-xl text-sm font-medium transition-colors"
               >
-                {{ statusText(resume.status) }}
-              </span>
+                编辑
+              </button>
+              <button
+                @click="deleteResume(resume)"
+                class="p-2.5 bg-stone-800 hover:bg-red-500/20 hover:text-red-400 rounded-xl transition-colors"
+              >
+                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                </svg>
+              </button>
             </div>
-          </div>
-
-          <div class="px-6 py-3 bg-gray-50 border-t border-gray-200 rounded-b-lg">
-            <button
-              @click="editResume(resume.id)"
-              class="w-full flex items-center justify-center px-4 py-2 border border-gray-300 rounded-md shadow-sm text-sm font-medium text-gray-700 bg-white hover:bg-gray-50"
-            >
-              编辑简历
-            </button>
           </div>
         </div>
       </div>
@@ -185,33 +138,37 @@
 <script setup lang="ts">
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useResumeListStore } from '@/stores/resumeList'
 import { useResumeStore } from '@/stores/resume'
-import { AppHeader } from '@/components/layout'
 import type { Resume } from '@/types'
 
 const router = useRouter()
+const authStore = useAuthStore()
 const resumeListStore = useResumeListStore()
 const resumeStore = useResumeStore()
 
 const searchQuery = ref('')
-const statusFilter = ref('')
-const openMenuId = ref<string | null>(null)
 
 const filteredResumes = computed(() => {
-  let result = resumeListStore.resumes
-
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    result = result.filter(r => r.title.toLowerCase().includes(query))
-  }
-
-  if (statusFilter.value) {
-    result = result.filter(r => r.status === statusFilter.value)
-  }
-
-  return result
+  if (!searchQuery.value) return resumeListStore.resumes
+  const query = searchQuery.value.toLowerCase()
+  return resumeListStore.resumes.filter(r => r.title.toLowerCase().includes(query))
 })
+
+const templateNames: Record<string, string> = {
+  minimal: '简约经典',
+  modern: '现代双栏',
+  professional: '商务专业',
+  creative: '创意设计',
+  business: '经典商务',
+  simple: '极简风格',
+  twoColumn: '清新双栏',
+}
+
+function templateName(id: string): string {
+  return templateNames[id] || id
+}
 
 onMounted(() => {
   resumeListStore.fetchResumes()
@@ -229,19 +186,6 @@ function formatDate(dateStr: string): string {
   return date.toLocaleDateString('zh-CN')
 }
 
-function statusText(status: string): string {
-  const map: Record<string, string> = {
-    draft: '草稿',
-    published: '已发布',
-    archived: '已归档',
-  }
-  return map[status] || status
-}
-
-function toggleMenu(id: string) {
-  openMenuId.value = openMenuId.value === id ? null : id
-}
-
 async function createNewResume() {
   const resume = await resumeStore.createResume('未命名简历', 'minimal')
   if (resume) {
@@ -257,24 +201,14 @@ async function toggleFavorite(resume: Resume) {
   await resumeListStore.toggleFavorite(resume.id)
 }
 
-async function duplicateResume(resume: Resume) {
-  const newResume = await resumeStore.duplicateResume()
-  if (newResume) {
-    resumeListStore.addResume(newResume)
-  }
-  openMenuId.value = null
-}
-
-function shareResume(resume: Resume) {
-  // TODO: 实现分享功能
-  console.log('Share resume:', resume.id)
-  openMenuId.value = null
-}
-
 async function deleteResume(resume: Resume) {
   if (confirm(`确定要删除"${resume.title}"吗？`)) {
     await resumeListStore.deleteResume(resume.id)
   }
-  openMenuId.value = null
+}
+
+async function handleLogout() {
+  await authStore.logout()
+  router.push('/')
 }
 </script>

@@ -1,5 +1,5 @@
 <template>
-  <div class="h-screen flex flex-col bg-gray-100">
+  <div class="h-screen flex flex-col bg-stone-950">
     <!-- Top Toolbar -->
     <EditorToolbar />
 

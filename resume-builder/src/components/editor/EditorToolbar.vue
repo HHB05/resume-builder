@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-white border-b border-gray-200 px-4 py-2 flex items-center justify-between">
+  <div class="bg-stone-900 border-b border-stone-800 px-4 py-2 flex items-center justify-between">
     <!-- Left side -->
     <div class="flex items-center space-x-4">
       <!-- Back button -->
       <button
         @click="goBack"
-        class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+        class="p-2 text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg transition-colors"
         title="返回"
       >
         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -14,14 +14,14 @@
       </button>
 
       <!-- Divider -->
-      <div class="w-px h-6 bg-gray-300"></div>
+      <div class="w-px h-6 bg-stone-700"></div>
 
       <!-- Undo/Redo -->
       <div class="flex items-center space-x-1">
         <button
           @click="undo"
           :disabled="!editorStore.canUndo"
-          class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="p-2 text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           title="撤销 (Ctrl+Z)"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -31,7 +31,7 @@
         <button
           @click="redo"
           :disabled="!editorStore.canRedo"
-          class="p-2 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+          class="p-2 text-stone-400 hover:text-white hover:bg-stone-800 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
           title="重做 (Ctrl+Y)"
         >
           <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -41,13 +41,13 @@
       </div>
 
       <!-- Divider -->
-      <div class="w-px h-6 bg-gray-300"></div>
+      <div class="w-px h-6 bg-stone-700"></div>
 
       <!-- Title -->
       <input
         v-model="resumeTitle"
         @blur="updateTitle"
-        class="text-lg font-medium text-gray-900 border-none focus:ring-0 focus:outline-none bg-transparent"
+        class="text-lg font-medium text-white border-none focus:ring-0 focus:outline-none bg-transparent"
         placeholder="输入简历标题"
       />
     </div>
@@ -60,8 +60,8 @@
         :class="[
           'px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
           editorStore.showTemplatePanel
-            ? 'bg-primary-100 text-primary-700'
-            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            ? 'bg-amber-500/20 text-amber-400'
+            : 'text-stone-400 hover:text-white hover:bg-stone-800'
         ]"
       >
         <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -76,8 +76,8 @@
         :class="[
           'px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
           editorStore.showAiPanel
-            ? 'bg-purple-100 text-purple-700'
-            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            ? 'bg-purple-500/20 text-purple-400'
+            : 'text-stone-400 hover:text-white hover:bg-stone-800'
         ]"
       >
         <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -92,8 +92,8 @@
         :class="[
           'px-3 py-1.5 text-sm font-medium rounded-lg transition-colors',
           editorStore.showPreview
-            ? 'bg-green-100 text-green-700'
-            : 'text-gray-600 hover:text-gray-900 hover:bg-gray-100'
+            ? 'bg-emerald-500/20 text-emerald-400'
+            : 'text-stone-400 hover:text-white hover:bg-stone-800'
         ]"
       >
         <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -107,7 +107,7 @@
     <!-- Right side -->
     <div class="flex items-center space-x-2">
       <!-- Save status -->
-      <div class="text-sm text-gray-500 mr-2">
+      <div class="text-sm text-stone-500 mr-2">
         <span v-if="resumeStore.isSaving">保存中...</span>
         <span v-else-if="resumeStore.isDirty">有未保存的更改</span>
         <span v-else-if="resumeStore.lastSavedAt">已保存</span>
@@ -117,7 +117,7 @@
       <button
         @click="save"
         :disabled="!resumeStore.isDirty || resumeStore.isSaving"
-        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+        class="px-4 py-2 text-sm font-medium text-stone-300 bg-stone-800 hover:bg-stone-700 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
       >
         <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 7H5a2 2 0 00-2 2v9a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2h-3m-1 4l-3 3m0 0l-3-3m3 3V4" />
@@ -129,7 +129,7 @@
       <div class="relative" ref="exportMenuRef">
         <button
           @click="showExportMenu = !showExportMenu"
-          class="px-4 py-2 text-sm font-medium text-white bg-primary-600 hover:bg-primary-700 rounded-lg transition-colors"
+          class="px-4 py-2 text-sm font-medium text-stone-950 bg-gradient-to-r from-amber-500 to-orange-500 hover:shadow-lg hover:shadow-amber-500/25 rounded-lg transition-all"
         >
           <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -151,11 +151,11 @@
         >
           <div
             v-if="showExportMenu"
-            class="absolute right-0 mt-2 w-48 bg-white rounded-md shadow-lg py-1 z-50"
+            class="absolute right-0 mt-2 w-48 bg-stone-900 border border-stone-800 rounded-xl shadow-xl py-1 z-50"
           >
             <button
               @click="exportPdf"
-              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              class="block w-full text-left px-4 py-2.5 text-sm text-stone-400 hover:text-white hover:bg-stone-800 transition-colors"
             >
               <svg class="w-4 h-4 inline-block mr-2 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 21h10a2 2 0 002-2V9.414a1 1 0 00-.293-.707l-5.414-5.414A1 1 0 0012.586 3H7a2 2 0 00-2 2v14a2 2 0 002 2z" />
@@ -164,7 +164,7 @@
             </button>
             <button
               @click="exportDocx"
-              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              class="block w-full text-left px-4 py-2.5 text-sm text-stone-400 hover:text-white hover:bg-stone-800 transition-colors"
             >
               <svg class="w-4 h-4 inline-block mr-2 text-blue-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
@@ -173,7 +173,7 @@
             </button>
             <button
               @click="exportImage"
-              class="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              class="block w-full text-left px-4 py-2.5 text-sm text-stone-400 hover:text-white hover:bg-stone-800 transition-colors"
             >
               <svg class="w-4 h-4 inline-block mr-2 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
@@ -187,7 +187,7 @@
       <!-- Share -->
       <button
         @click="share"
-        class="px-4 py-2 text-sm font-medium text-gray-700 bg-gray-100 hover:bg-gray-200 rounded-lg transition-colors"
+        class="px-4 py-2 text-sm font-medium text-stone-300 bg-stone-800 hover:bg-stone-700 rounded-lg transition-colors"
       >
         <svg class="w-4 h-4 inline-block mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
           <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" />

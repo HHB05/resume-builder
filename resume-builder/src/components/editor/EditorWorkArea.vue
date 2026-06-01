@@ -1,6 +1,6 @@
 <template>
-  <div class="flex-1 overflow-y-auto bg-gray-50">
-    <div class="max-w-3xl mx-auto py-6 px-4">
+  <div class="flex-1 overflow-y-auto bg-stone-950">
+    <div class="max-w-3xl mx-auto py-8 px-6">
       <!-- Personal Info Form -->
       <PersonalInfoForm
         v-if="editorStore.activeModule === 'personal'"
