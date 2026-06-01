@@ -1,0 +1,7 @@
+export { default as MinimalTemplate } from './MinimalTemplate.vue'
+export { default as ModernTemplate } from './ModernTemplate.vue'
+export { default as ProfessionalTemplate } from './ProfessionalTemplate.vue'
+export { default as CreativeTemplate } from './CreativeTemplate.vue'
+export { default as BusinessTemplate } from './BusinessTemplate.vue'
+export { default as SimpleTemplate } from './SimpleTemplate.vue'
+export { default as TwoColumnTemplate } from './TwoColumnTemplate.vue'

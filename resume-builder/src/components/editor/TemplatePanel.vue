@@ -80,7 +80,7 @@
                 {{ template.isPremium ? '专业版' : '免费' }}
               </span>
               <span class="text-xs text-gray-500 ml-2">
-                {{ template.downloadCount }} 次使用
+                {{ formatCount(template.downloadCount) }} 使用
               </span>
             </div>
           </div>
@@ -114,6 +114,7 @@
 import { ref, computed } from 'vue'
 import { useResumeStore } from '@/stores/resume'
 import { useEditorStore } from '@/stores/editor'
+import { templates } from '@/data/templates'
 import type { Template } from '@/types'
 
 const resumeStore = useResumeStore()
@@ -126,125 +127,25 @@ const styles = [
   { label: '简约', value: 'minimal' },
   { label: '商务', value: 'business' },
   { label: '创意', value: 'creative' },
-  { label: '经典', value: 'classic' },
 ]
-
-// 模拟模板数据
-const templates = ref<Template[]>([
-  {
-    id: 'minimal',
-    name: '简约风格',
-    category: 'general',
-    style: 'minimal',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#2563eb',
-      secondaryColor: '#1e40af',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-      fontSize: { title: 24, heading: 18, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 16, itemGap: 8, lineHeight: 1.5, padding: 20 },
-      layout: 'single-column',
-      headerStyle: 'left',
-      sectionTitleStyle: 'underline',
-    },
-    isPremium: false,
-    downloadCount: 1234,
-    rating: 4.8,
-    ratingCount: 156,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: 'business',
-    name: '商务专业',
-    category: 'finance',
-    style: 'business',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#1f2937',
-      secondaryColor: '#374151',
-      fontFamily: { heading: 'Noto Sans SC', body: 'Noto Sans SC' },
-      fontSize: { title: 22, heading: 16, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 14, itemGap: 6, lineHeight: 1.5, padding: 20 },
-      layout: 'single-column',
-      headerStyle: 'center',
-      sectionTitleStyle: 'background',
-    },
-    isPremium: false,
-    downloadCount: 987,
-    rating: 4.6,
-    ratingCount: 98,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: 'creative',
-    name: '创意设计',
-    category: 'design',
-    style: 'creative',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#9333ea',
-      secondaryColor: '#7e22ce',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-      fontSize: { title: 24, heading: 18, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 16, itemGap: 8, lineHeight: 1.5, padding: 20 },
-      layout: 'two-column',
-      headerStyle: 'left',
-      sectionTitleStyle: 'border-left',
-    },
-    isPremium: true,
-    downloadCount: 654,
-    rating: 4.9,
-    ratingCount: 76,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: 'classic',
-    name: '经典模板',
-    category: 'general',
-    style: 'classic',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#0f172a',
-      secondaryColor: '#334155',
-      fontFamily: { heading: 'Noto Serif SC', body: 'Noto Sans SC' },
-      fontSize: { title: 22, heading: 16, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 14, itemGap: 6, lineHeight: 1.6, padding: 20 },
-      layout: 'single-column',
-      headerStyle: 'center',
-      sectionTitleStyle: 'border-bottom',
-    },
-    isPremium: false,
-    downloadCount: 1567,
-    rating: 4.7,
-    ratingCount: 203,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-])
 
 const filteredTemplates = computed(() => {
   if (selectedStyle.value === 'all') {
-    return templates.value
+    return templates
   }
-  return templates.value.filter(t => t.style === selectedStyle.value)
+  return templates.filter(t => t.style === selectedStyle.value)
 })
 
 function selectTemplate(template: Template) {
   resumeStore.updateTemplate(template.id)
+}
+
+function formatCount(count: number): string {
+  if (count >= 10000) {
+    return (count / 10000).toFixed(1) + 'w'
+  } else if (count >= 1000) {
+    return (count / 1000).toFixed(1) + 'k'
+  }
+  return count.toString()
 }
 </script>
