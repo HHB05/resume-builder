@@ -22,6 +22,9 @@ export const useAuthStore = defineStore('auth', () => {
 
   // 初始化：从本地存储恢复状态
   function initialize() {
+    // 清理旧的缓存（Session Storage）
+    sessionStorage.clear()
+
     const storedAccessToken = localStorage.getItem('accessToken')
     const storedRefreshToken = localStorage.getItem('refreshToken')
     const storedUser = localStorage.getItem('currentUser')
@@ -42,6 +45,10 @@ export const useAuthStore = defineStore('auth', () => {
   async function login(params: UserLoginParams): Promise<boolean> {
     loading.value = true
     error.value = null
+
+    // 清理旧的缓存数据
+    localStorage.clear()
+    sessionStorage.clear()
 
     try {
       const response: UserLoginResponse = await authService.login(params)

@@ -29,6 +29,7 @@
 <script setup lang="ts">
 import { onMounted, onUnmounted, watch } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
+import { useAuthStore } from '@/stores/auth'
 import { useResumeStore } from '@/stores/resume'
 import { useEditorStore } from '@/stores/editor'
 import EditorToolbar from '@/components/editor/EditorToolbar.vue'
@@ -41,20 +42,30 @@ import TemplatePanel from '@/components/editor/TemplatePanel.vue'
 
 const route = useRoute()
 const router = useRouter()
+const authStore = useAuthStore()
 const resumeStore = useResumeStore()
 const editorStore = useEditorStore()
 
-// 加载简历
+// 认证检查
 onMounted(async () => {
+  // 检查是否已登录
+  if (!authStore.isAuthenticated) {
+    router.push({ name: 'Login', query: { redirect: route.fullPath } })
+    return
+  }
+
+  // 加载简历
   const id = route.params.id as string
+  const templateId = route.query.template as string || 'cn-001'
+
   if (id) {
     const success = await resumeStore.loadResume(id)
     if (!success) {
       router.push('/dashboard')
     }
   } else {
-    // 创建新简历
-    const resume = await resumeStore.createResume('未命名简历', 'minimal')
+    // 创建新简历，使用指定的模板
+    const resume = await resumeStore.createResume('新简历', templateId)
     if (resume) {
       router.replace(`/editor/${resume.id}`)
     }

@@ -34,7 +34,7 @@ export const useResumeStore = defineStore('resume', () => {
   // 计算属性
   const resumeId = computed(() => currentResume.value?.id || null)
   const resumeTitle = computed(() => currentResume.value?.title || '未命名简历')
-  const templateId = computed(() => currentResume.value?.templateId || 'minimal')
+  const templateId = computed(() => currentResume.value?.templateId || 'cn-001')
   const resumeContent = computed(() => currentResume.value?.content || defaultResumeContent)
   const language = computed(() => currentResume.value?.language || 'zh')
   const version = computed(() => currentResume.value?.version || 1)

@@ -38,13 +38,8 @@ export function removeStorage(key: string): void {
 // 清空存储
 export function clearStorage(): void {
   try {
-    // 只清除我们的存储，保留其他应用的存储
-    const keys = Object.keys(localStorage)
-    keys.forEach((key) => {
-      if (key.startsWith(PREFIX)) {
-        localStorage.removeItem(key)
-      }
-    })
+    localStorage.clear()
+    sessionStorage.clear()
   } catch (error) {
     console.error('Failed to clear storage:', error)
   }
@@ -101,4 +96,12 @@ export function removeSessionStorage(key: string): void {
   } catch (error) {
     console.error('Failed to remove session storage:', error)
   }
+}
+
+// 页面卸载时清理存储（可选）
+export function setupAutoCleanup() {
+  window.addEventListener('beforeunload', () => {
+    // 清理临时数据
+    sessionStorage.clear()
+  })
 }

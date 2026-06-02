@@ -91,8 +91,11 @@ router.beforeEach((to, _from, next) => {
   // 检查是否需要登录
   const requiresAuth = to.meta.requiresAuth as boolean
   if (requiresAuth) {
-    const authStore = useAuthStore()
-    if (!authStore.isAuthenticated) {
+    // 直接检查localStorage中的token
+    const token = localStorage.getItem('accessToken')
+    const user = localStorage.getItem('currentUser')
+
+    if (!token || !user) {
       // 未登录，跳转到登录页，并记录原目标路径
       next({
         name: 'Login',

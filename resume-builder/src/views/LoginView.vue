@@ -1,20 +1,20 @@
 <template>
   <div class="min-h-screen bg-stone-950 flex">
-    <!-- Left side - Branding -->
+    <!-- Left side - Branding with templates preview -->
     <div class="hidden lg:flex lg:w-1/2 relative overflow-hidden">
       <div class="absolute inset-0 bg-gradient-to-br from-amber-500/10 to-orange-500/10"></div>
       <div class="absolute top-1/4 -left-32 w-96 h-96 bg-amber-500/20 rounded-full blur-3xl"></div>
       <div class="absolute bottom-1/4 right-0 w-96 h-96 bg-orange-500/20 rounded-full blur-3xl"></div>
 
-      <div class="relative z-10 flex flex-col justify-center px-16">
-        <div class="flex items-center gap-3 mb-12">
+      <div class="relative z-10 flex flex-col justify-center px-12">
+        <div class="flex items-center gap-3 mb-8">
           <div class="w-12 h-12 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
             <span class="text-stone-950 font-bold text-xl">R</span>
           </div>
           <span class="font-serif text-2xl">ResumeCraft</span>
         </div>
 
-        <h1 class="text-5xl font-serif leading-tight tracking-tight mb-6">
+        <h1 class="text-4xl font-serif leading-tight tracking-tight mb-4">
           打造<br>
           <span class="bg-gradient-to-r from-amber-400 to-orange-400 bg-clip-text text-transparent">
             令人难忘的
@@ -22,22 +22,31 @@
           简历
         </h1>
 
-        <p class="text-lg text-stone-400 max-w-md">
+        <p class="text-stone-400 max-w-md mb-6">
           AI 驱动的专业简历制作平台，让求职更简单
         </p>
 
-        <div class="mt-16 flex gap-8">
+        <!-- Template Preview Grid -->
+        <div class="grid grid-cols-3 gap-3 mb-6">
+          <div v-for="(tpl, index) in previewTemplates" :key="index"
+            @click="selectTemplate(tpl)"
+            class="aspect-[3/4] rounded-lg overflow-hidden border border-stone-700/50 hover:border-amber-500/50 transition-all cursor-pointer">
+            <img :src="tpl.thumbnail" :alt="tpl.name" class="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        <div class="flex gap-6">
           <div class="text-center">
-            <div class="text-3xl font-serif text-amber-400">50+</div>
-            <div class="text-sm text-stone-500">专业模板</div>
+            <div class="text-2xl font-serif text-amber-400">50+</div>
+            <div class="text-xs text-stone-500">专业模板</div>
           </div>
           <div class="text-center">
-            <div class="text-3xl font-serif text-amber-400">10万+</div>
-            <div class="text-sm text-stone-500">用户信赖</div>
+            <div class="text-2xl font-serif text-amber-400">10万+</div>
+            <div class="text-xs text-stone-500">用户信赖</div>
           </div>
           <div class="text-center">
-            <div class="text-3xl font-serif text-amber-400">98%</div>
-            <div class="text-sm text-stone-500">好评率</div>
+            <div class="text-2xl font-serif text-amber-400">98%</div>
+            <div class="text-xs text-stone-500">好评率</div>
           </div>
         </div>
       </div>
@@ -47,14 +56,23 @@
     <div class="flex-1 flex items-center justify-center px-6 py-12">
       <div class="w-full max-w-md">
         <!-- Mobile logo -->
-        <div class="lg:hidden flex items-center gap-3 mb-12 justify-center">
+        <div class="lg:hidden flex items-center gap-3 mb-8 justify-center">
           <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
             <span class="text-stone-950 font-bold text-lg">R</span>
           </div>
           <span class="font-serif text-xl">ResumeCraft</span>
         </div>
 
-        <div class="space-y-8">
+        <!-- Mobile template preview -->
+        <div class="lg:hidden grid grid-cols-4 gap-2 mb-8">
+          <div v-for="(tpl, index) in previewTemplates.slice(0, 4)" :key="index"
+            @click="selectTemplate(tpl)"
+            class="aspect-[3/4] rounded-lg overflow-hidden border border-stone-700/50 cursor-pointer hover:border-amber-500/50 transition-all">
+            <img :src="tpl.thumbnail" :alt="tpl.name" class="w-full h-full object-cover" />
+          </div>
+        </div>
+
+        <div class="space-y-6">
           <div>
             <h2 class="text-3xl font-serif tracking-tight">欢迎回来</h2>
             <p class="text-stone-500 mt-2">登录您的账号继续使用</p>
@@ -145,16 +163,42 @@
 import { reactive } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
 import { useAuthStore } from '@/stores/auth'
+import { useResumeStore } from '@/stores/resume'
 
 const router = useRouter()
 const route = useRoute()
 const authStore = useAuthStore()
+const resumeStore = useResumeStore()
 
 const form = reactive({
   email: '',
   password: '',
   rememberMe: false,
 })
+
+// 预览模板 - 需要与模板ID对应
+const previewTemplates = [
+  { id: 'cn-001', name: '简约经典', thumbnail: '/templates/chinese/001.jpg' },
+  { id: 'cn-002', name: '商务专业', thumbnail: '/templates/chinese/002.jpg' },
+  { id: 'cn-005', name: '创意设计', thumbnail: '/templates/chinese/005.jpg' },
+  { id: 'cn-009', name: '创意求职', thumbnail: '/templates/chinese/009.jpg' },
+  { id: 'en-001', name: '英文专业', thumbnail: '/templates/english/001.jpg' },
+  { id: 'en-002', name: '英文简约', thumbnail: '/templates/english/002.jpg' },
+]
+
+// 点击模板
+async function selectTemplate(tpl: { id: string; name: string; thumbnail: string }) {
+  if (authStore.isAuthenticated) {
+    // 已登录，直接创建简历并跳转到编辑器
+    const resume = await resumeStore.createResume('新简历', tpl.id)
+    if (resume) {
+      router.push(`/editor/${resume.id}`)
+    }
+  } else {
+    // 未登录，跳转到登录页面并带上模板参数
+    router.push({ path: '/login', query: { template: tpl.id } })
+  }
+}
 
 async function handleLogin() {
   const success = await authStore.login({
@@ -163,6 +207,18 @@ async function handleLogin() {
   })
 
   if (success) {
+    // 检查是否有模板参数
+    const templateId = route.query.template as string
+    if (templateId) {
+      // 创建新简历并跳转到编辑器
+      const resume = await resumeStore.createResume('新简历', templateId)
+      if (resume) {
+        router.push(`/editor/${resume.id}`)
+        return
+      }
+    }
+
+    // 没有模板参数，跳转到重定向页面或仪表盘
     const redirect = route.query.redirect as string
     router.push(redirect || '/dashboard')
   }

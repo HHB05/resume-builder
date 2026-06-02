@@ -1,56 +1,97 @@
 <template>
-  <div class="min-h-screen bg-gray-50">
-    <AppHeader />
+  <div class="min-h-screen bg-stone-950 text-white">
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 px-6 py-4 backdrop-blur-md bg-stone-950/70 border-b border-stone-800/50">
+      <div class="max-w-7xl mx-auto flex items-center justify-between">
+        <div class="flex items-center gap-3">
+          <router-link to="/" class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-amber-400 to-orange-500 flex items-center justify-center">
+              <span class="text-stone-950 font-bold text-lg">R</span>
+            </div>
+            <span class="font-serif text-xl tracking-tight">ResumeCraft</span>
+          </router-link>
+        </div>
+        <div class="flex items-center gap-4">
+          <router-link to="/login" class="text-sm text-stone-400 hover:text-white transition-colors">
+            登录
+          </router-link>
+          <router-link to="/register" class="px-5 py-2 bg-white text-stone-950 text-sm font-medium rounded-full hover:bg-stone-200 transition-all">
+            免费注册
+          </router-link>
+        </div>
+      </div>
+    </nav>
 
-    <main class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+    <main class="max-w-7xl mx-auto py-12 px-6">
       <!-- Header -->
-      <div class="mb-8">
-        <h1 class="text-2xl font-bold text-gray-900">模板中心</h1>
-        <p class="mt-1 text-sm text-gray-600">选择适合您行业的专业模板</p>
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-serif tracking-tight">模板中心</h1>
+        <p class="text-stone-500 mt-2">选择适合您的专业模板，开始制作简历</p>
       </div>
 
       <!-- Filters -->
-      <div class="mb-6 flex flex-wrap gap-4">
-        <select
-          v-model="selectedCategory"
-          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
+      <div class="mb-8 flex flex-wrap items-center justify-center gap-3">
+        <button
+          v-for="filter in filters"
+          :key="filter.value"
+          @click="selectedFilter = filter.value"
+          :class="[
+            'px-4 py-2 text-sm rounded-full transition-all',
+            selectedFilter === filter.value
+              ? 'bg-amber-500/20 text-amber-400 border border-amber-500/30'
+              : 'bg-stone-800/50 text-stone-400 hover:text-white border border-transparent'
+          ]"
         >
-          <option value="">全部行业</option>
-          <option value="tech">互联网/IT</option>
-          <option value="finance">金融</option>
-          <option value="education">教育</option>
-          <option value="design">设计</option>
-          <option value="medical">医疗</option>
-          <option value="general">通用</option>
-        </select>
-
-        <select
-          v-model="selectedStyle"
-          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        >
-          <option value="">全部风格</option>
-          <option value="minimal">简约</option>
-          <option value="business">商务</option>
-          <option value="creative">创意</option>
-          <option value="classic">经典</option>
-        </select>
-
-        <input
-          v-model="searchQuery"
-          type="text"
-          placeholder="搜索模板..."
-          class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-primary-500"
-        />
+          {{ filter.label }}
+        </button>
       </div>
 
       <!-- Templates grid -->
-      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <TemplateCard
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
+        <div
           v-for="template in filteredTemplates"
           :key="template.id"
-          :template="template"
-          @select="selectTemplate"
-        />
+          @click="selectTemplate(template)"
+          class="group relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer border border-stone-800 hover:border-amber-500/50 transition-all hover:scale-[1.02]"
+        >
+          <!-- Template image -->
+          <img
+            v-if="template.thumbnailUrl"
+            :src="template.thumbnailUrl"
+            :alt="template.name"
+            class="w-full h-full object-cover"
+          />
+          <div v-else class="w-full h-full bg-stone-800 p-3 flex flex-col">
+            <div class="w-full h-1/4 rounded mb-2" :style="{ backgroundColor: template.config.primaryColor }"></div>
+            <div class="space-y-1">
+              <div class="w-3/4 h-1 bg-stone-600 rounded"></div>
+              <div class="w-1/2 h-1 bg-stone-600 rounded"></div>
+            </div>
+          </div>
+
+          <!-- Hover overlay -->
+          <div class="absolute inset-0 bg-gradient-to-t from-stone-950/90 via-stone-950/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity flex flex-col justify-end p-4">
+            <h4 class="font-serif text-white text-sm mb-1">{{ template.name }}</h4>
+            <div class="flex items-center gap-2">
+              <span
+                :class="[
+                  'text-xs px-2 py-0.5 rounded',
+                  template.isPremium
+                    ? 'bg-amber-500/20 text-amber-400'
+                    : 'bg-emerald-500/20 text-emerald-400'
+                ]"
+              >
+                {{ template.isPremium ? 'PRO' : '免费' }}
+              </span>
+              <span class="text-xs text-stone-400">{{ template.style }}</span>
+            </div>
+          </div>
+
+          <!-- Premium badge -->
+          <div v-if="template.isPremium" class="absolute top-2 right-2">
+            <span class="px-2 py-0.5 bg-amber-500 text-stone-950 text-xs font-bold rounded">PRO</span>
+          </div>
+        </div>
       </div>
     </main>
   </div>
@@ -59,145 +100,55 @@
 <script setup lang="ts">
 import { ref, computed } from 'vue'
 import { useRouter } from 'vue-router'
-import { AppHeader } from '@/components/layout'
-import { TemplateCard } from '@/components/template'
+import { useAuthStore } from '@/stores/auth'
+import { useResumeStore } from '@/stores/resume'
+import { templates } from '@/data/templates'
 import type { Template } from '@/types'
 
 const router = useRouter()
+const authStore = useAuthStore()
+const resumeStore = useResumeStore()
 
-const selectedCategory = ref('')
-const selectedStyle = ref('')
-const searchQuery = ref('')
+const selectedFilter = ref('all')
 
-// 模拟模板数据
-const templates = ref<Template[]>([
-  {
-    id: 'minimal',
-    name: '简约风格',
-    category: 'general',
-    style: 'minimal',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#2563eb',
-      secondaryColor: '#1e40af',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-      fontSize: { title: 24, heading: 18, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 16, itemGap: 8, lineHeight: 1.5, padding: 20 },
-      layout: 'single-column',
-      headerStyle: 'left',
-      sectionTitleStyle: 'underline',
-    },
-    isPremium: false,
-    downloadCount: 1234,
-    rating: 4.8,
-    ratingCount: 156,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: 'business',
-    name: '商务专业',
-    category: 'finance',
-    style: 'business',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#1f2937',
-      secondaryColor: '#374151',
-      fontFamily: { heading: 'Noto Sans SC', body: 'Noto Sans SC' },
-      fontSize: { title: 22, heading: 16, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 14, itemGap: 6, lineHeight: 1.5, padding: 20 },
-      layout: 'single-column',
-      headerStyle: 'center',
-      sectionTitleStyle: 'background',
-    },
-    isPremium: false,
-    downloadCount: 987,
-    rating: 4.6,
-    ratingCount: 98,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: 'creative',
-    name: '创意设计',
-    category: 'design',
-    style: 'creative',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#9333ea',
-      secondaryColor: '#7e22ce',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-      fontSize: { title: 24, heading: 18, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 16, itemGap: 8, lineHeight: 1.5, padding: 20 },
-      layout: 'two-column',
-      headerStyle: 'left',
-      sectionTitleStyle: 'border-left',
-    },
-    isPremium: true,
-    downloadCount: 654,
-    rating: 4.9,
-    ratingCount: 76,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-  {
-    id: 'tech',
-    name: '技术岗位',
-    category: 'tech',
-    style: 'minimal',
-    thumbnailUrl: '',
-    previewUrls: [],
-    config: {
-      primaryColor: '#059669',
-      secondaryColor: '#047857',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-      fontSize: { title: 24, heading: 18, subheading: 14, body: 12, small: 10 },
-      spacing: { sectionGap: 16, itemGap: 8, lineHeight: 1.5, padding: 20 },
-      layout: 'single-column',
-      headerStyle: 'left',
-      sectionTitleStyle: 'border-left',
-    },
-    isPremium: false,
-    downloadCount: 1567,
-    rating: 4.7,
-    ratingCount: 203,
-    authorId: null,
-    status: 1,
-    createdAt: '',
-    updatedAt: '',
-  },
-])
+const filters = [
+  { label: '全部', value: 'all' },
+  { label: '中文简历', value: 'chinese' },
+  { label: '英文简历', value: 'english' },
+  { label: '简约', value: 'minimal' },
+  { label: '商务', value: 'business' },
+  { label: '创意', value: 'creative' },
+]
 
 const filteredTemplates = computed(() => {
-  let result = templates.value
-
-  if (selectedCategory.value) {
-    result = result.filter(t => t.category === selectedCategory.value)
+  if (selectedFilter.value === 'all') {
+    return templates
   }
-
-  if (selectedStyle.value) {
-    result = result.filter(t => t.style === selectedStyle.value)
+  if (selectedFilter.value === 'chinese') {
+    return templates.filter(t => t.id.startsWith('cn-'))
   }
-
-  if (searchQuery.value) {
-    const query = searchQuery.value.toLowerCase()
-    result = result.filter(t => t.name.toLowerCase().includes(query))
+  if (selectedFilter.value === 'english') {
+    return templates.filter(t => t.id.startsWith('en-'))
   }
-
-  return result
+  return templates.filter(t => t.style === selectedFilter.value)
 })
 
-function selectTemplate(template: Template) {
-  // 跳转到编辑器，使用选中的模板
-  router.push({ path: '/editor', query: { template: template.id } })
+async function selectTemplate(template: Template) {
+  if (template.isPremium && !authStore.isProUser) {
+    // 专业版模板，需要升级
+    alert('此模板为专业版，请升级后使用')
+    return
+  }
+
+  if (authStore.isAuthenticated) {
+    // 已登录，直接跳转到编辑器
+    const resume = await resumeStore.createResume('新简历', template.id)
+    if (resume) {
+      router.push(`/editor/${resume.id}`)
+    }
+  } else {
+    // 未登录，跳转到登录页面
+    router.push({ path: '/login', query: { template: template.id } })
+  }
 }
 </script>

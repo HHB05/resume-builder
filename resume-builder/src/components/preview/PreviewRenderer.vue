@@ -1,7 +1,6 @@
 <template>
   <div class="bg-white shadow-lg" :style="pageStyle">
-    <component
-      :is="currentTemplate"
+    <GenericTemplate
       :content="content"
       :config="templateConfig"
     />
@@ -11,15 +10,8 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import type { ResumeContent } from '@/types'
-import {
-  MinimalTemplate,
-  ModernTemplate,
-  ProfessionalTemplate,
-  CreativeTemplate,
-  BusinessTemplate,
-  SimpleTemplate,
-  TwoColumnTemplate,
-} from './templates'
+import GenericTemplate from './templates/GenericTemplate.vue'
+import { templates } from '@/data/templates'
 
 const props = defineProps<{
   content: ResumeContent
@@ -27,59 +19,23 @@ const props = defineProps<{
   previewMode: 'pc' | 'tablet' | 'mobile'
 }>()
 
-const templateMap: Record<string, any> = {
-  minimal: MinimalTemplate,
-  modern: ModernTemplate,
-  professional: ProfessionalTemplate,
-  creative: CreativeTemplate,
-  business: BusinessTemplate,
-  simple: SimpleTemplate,
-  twoColumn: TwoColumnTemplate,
-}
-
-const currentTemplate = computed(() => {
-  return templateMap[props.templateId] || MinimalTemplate
-})
-
+// 从模板数据中获取配置
 const templateConfig = computed(() => {
-  const configs: Record<string, any> = {
-    minimal: {
-      primaryColor: '#2563eb',
-      secondaryColor: '#1e40af',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-    },
-    modern: {
-      primaryColor: '#0f172a',
-      secondaryColor: '#334155',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-    },
-    professional: {
-      primaryColor: '#1e40af',
-      secondaryColor: '#3b82f6',
-      fontFamily: { heading: 'Noto Sans SC', body: 'Noto Sans SC' },
-    },
-    creative: {
-      primaryColor: '#7c3aed',
-      secondaryColor: '#a78bfa',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-    },
-    business: {
-      primaryColor: '#0f172a',
-      secondaryColor: '#475569',
-      fontFamily: { heading: 'Noto Sans SC', body: 'Noto Sans SC' },
-    },
-    simple: {
-      primaryColor: '#374151',
-      secondaryColor: '#6b7280',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-    },
-    twoColumn: {
-      primaryColor: '#0d9488',
-      secondaryColor: '#14b8a6',
-      fontFamily: { heading: 'Inter', body: 'Inter' },
-    },
+  const template = templates.find(t => t.id === props.templateId)
+  if (template) {
+    return template.config
   }
-  return configs[props.templateId] || configs.minimal
+  // 默认配置
+  return {
+    primaryColor: '#2563eb',
+    secondaryColor: '#1e40af',
+    fontFamily: { heading: 'Noto Sans SC', body: 'Noto Sans SC' },
+    fontSize: { title: 24, heading: 18, subheading: 14, body: 12, small: 10 },
+    spacing: { sectionGap: 16, itemGap: 8, lineHeight: 1.5, padding: 20 },
+    layout: 'single-column',
+    headerStyle: 'left',
+    sectionTitleStyle: 'underline',
+  }
 })
 
 const pageStyle = computed(() => {

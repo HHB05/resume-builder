@@ -163,25 +163,17 @@
             为每个行业<br>
             <span class="text-stone-500">精心设计</span>
           </h2>
+          <p class="text-stone-400 mt-4">超过25种专业模板，覆盖各行各业</p>
         </div>
 
-        <div class="grid md:grid-cols-3 gap-6">
-          <div v-for="(template, index) in templates" :key="index"
-            class="group relative aspect-[3/4] rounded-2xl overflow-hidden cursor-pointer border border-stone-800 hover:border-amber-500/50 transition-all">
-            <div class="absolute inset-0" :style="{ background: template.gradient }"></div>
-            <div class="absolute inset-0 bg-stone-950/60 group-hover:bg-stone-950/40 transition-colors"></div>
-            <div class="absolute inset-0 p-6 flex flex-col justify-between">
-              <div class="text-center">
-                <div class="w-16 h-20 bg-white/10 rounded-lg mx-auto mb-4 backdrop-blur"></div>
-                <div class="space-y-2">
-                  <div class="h-2 bg-white/20 rounded w-3/4 mx-auto"></div>
-                  <div class="h-2 bg-white/20 rounded w-1/2 mx-auto"></div>
-                </div>
-              </div>
-              <div>
-                <h4 class="font-serif text-xl">{{ template.name }}</h4>
-                <p class="text-sm text-stone-400 mt-1">{{ template.category }}</p>
-              </div>
+        <div class="grid md:grid-cols-4 gap-4">
+          <div v-for="(template, index) in homepageTemplates" :key="index"
+            class="group relative aspect-[3/4] rounded-xl overflow-hidden cursor-pointer border border-stone-800 hover:border-amber-500/50 transition-all">
+            <img :src="template.thumbnail" :alt="template.name" class="w-full h-full object-cover" />
+            <div class="absolute inset-0 bg-gradient-to-t from-stone-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity"></div>
+            <div class="absolute bottom-0 left-0 right-0 p-4 transform translate-y-full group-hover:translate-y-0 transition-transform">
+              <h4 class="font-serif text-white text-sm">{{ template.name }}</h4>
+              <p class="text-xs text-stone-300">{{ template.category }}</p>
             </div>
           </div>
         </div>
@@ -189,7 +181,7 @@
         <div class="text-center mt-12">
           <router-link to="/templates"
             class="inline-flex items-center gap-2 px-8 py-4 border border-stone-700 rounded-full hover:bg-stone-800 transition-all">
-            查看全部模板
+            查看全部 25+ 模板
             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3"/>
             </svg>
@@ -269,5 +261,17 @@ const templates = [
     category: '设计',
     gradient: 'linear-gradient(135deg, #533483 0%, #0f3460 100%)',
   },
+]
+
+// 首页展示的模板
+const homepageTemplates = [
+  { name: '简约经典', category: '通用', thumbnail: '/templates/chinese/001.jpg' },
+  { name: '简约风求职', category: '通用', thumbnail: '/templates/chinese/002.jpg' },
+  { name: '应届毕业生', category: '通用', thumbnail: '/templates/chinese/003.jpg' },
+  { name: '砖红色通用', category: '通用', thumbnail: '/templates/chinese/004.jpg' },
+  { name: '左右双栏', category: '创意', thumbnail: '/templates/chinese/005.jpg' },
+  { name: '个人简历', category: '通用', thumbnail: '/templates/chinese/006.jpg' },
+  { name: '项目经理', category: '金融', thumbnail: '/templates/chinese/007.jpg' },
+  { name: '英文专业', category: 'English', thumbnail: '/templates/english/001.jpg' },
 ]
 </script>
